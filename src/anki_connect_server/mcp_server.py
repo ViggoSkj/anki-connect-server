@@ -7,11 +7,13 @@ from fastmcp import FastMCP
 
 from anki_connect_server.anki_wrapper import AnkiWrapper
 from anki_connect_server.config import get_config
-from anki_connect_server.sync import MediaSyncResult, SyncResult
+from anki_connect_server.mcp_extentions import register_mcp_extensions
+
+# from anki_connect_server.sync import MediaSyncResult, SyncResult
 from anki_connect_server.tool_metadata import (
     ADDITIVE_WRITE,
-    DESTRUCTIVE_IDEMPOTENT_WRITE,
-    DESTRUCTIVE_OPEN_WORLD_WRITE,
+    # DESTRUCTIVE_IDEMPOTENT_WRITE,
+    # DESTRUCTIVE_OPEN_WORLD_WRITE,
     IDEMPOTENT_WRITE,
     READ_ONLY,
     SERVER_INSTRUCTIONS,
@@ -77,11 +79,11 @@ def create_deck(deck: str) -> int:
     return get_anki_wrapper().create_deck(deck)
 
 
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def delete_decks(decks: list[str], cards_too: bool = False) -> bool:
-    """Delete one or more decks. Set cardsToo to True to also delete cards."""
-    get_anki_wrapper().delete_decks(decks, cards_too)
-    return True
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def delete_decks(decks: list[str], cards_too: bool = False) -> bool:
+#     """Delete one or more decks. Set cardsToo to True to also delete cards."""
+#     get_anki_wrapper().delete_decks(decks, cards_too)
+#     return True
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -128,11 +130,11 @@ def model_add_field(model_name: str, field_name: str, index: int | None = None) 
     return True
 
 
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def model_remove_field(model_name: str, field_name: str) -> bool:
-    """Remove a field from a model. Data in the field is lost from all notes."""
-    get_anki_wrapper().model_remove_field(model_name, field_name)
-    return True
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def model_remove_field(model_name: str, field_name: str) -> bool:
+#     """Remove a field from a model. Data in the field is lost from all notes."""
+#     get_anki_wrapper().model_remove_field(model_name, field_name)
+#     return True
 
 
 @mcp.tool(annotations=IDEMPOTENT_WRITE)
@@ -176,11 +178,11 @@ def get_notes_info(notes: list[int]) -> list[JsonObject]:
     return get_anki_wrapper().notes_info(notes)
 
 
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def delete_notes(notes: list[int]) -> bool:
-    """Delete notes by their IDs."""
-    get_anki_wrapper().delete_notes(notes)
-    return True
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def delete_notes(notes: list[int]) -> bool:
+#     """Delete notes by their IDs."""
+#     get_anki_wrapper().delete_notes(notes)
+#     return True
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -195,34 +197,34 @@ def get_cards_info(cards: list[int]) -> list[JsonObject]:
     return get_anki_wrapper().cards_info(cards)
 
 
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def update_note_fields(note_id: int, fields: dict[str, str]) -> bool:
-    """Update fields of an existing note (get the note ID via find_notes /
-    get_notes_info). Only the given fields are changed; text and HTML are
-    stored verbatim. Edits affect all sibling cards of the note."""
-    get_anki_wrapper().update_note_fields(cast(JsonObject, {"id": note_id, "fields": fields}))
-    return True
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def update_note_fields(note_id: int, fields: dict[str, str]) -> bool:
+#     """Update fields of an existing note (get the note ID via find_notes /
+#     get_notes_info). Only the given fields are changed; text and HTML are
+#     stored verbatim. Edits affect all sibling cards of the note."""
+#     get_anki_wrapper().update_note_fields(cast(JsonObject, {"id": note_id, "fields": fields}))
+#     return True
 
 
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def update_note(
-    note_id: int, fields: dict[str, str] | None = None, tags: list[str] | None = None
-) -> bool:
-    """Update the fields and/or tags of an existing note.
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def update_note(
+#     note_id: int, fields: dict[str, str] | None = None, tags: list[str] | None = None
+# ) -> bool:
+#     """Update the fields and/or tags of an existing note.
+#
+#     fields are patched onto the note; tags replace the existing set. Pass
+#     at least one of the two. Get the note ID via find_notes / get_notes_info.
+#     """
+#     get_anki_wrapper().update_note(
+#         cast(JsonObject, {"id": note_id, "fields": fields or {}, "tags": tags or []})
+#     )
+#     return True
 
-    fields are patched onto the note; tags replace the existing set. Pass
-    at least one of the two. Get the note ID via find_notes / get_notes_info.
-    """
-    get_anki_wrapper().update_note(
-        cast(JsonObject, {"id": note_id, "fields": fields or {}, "tags": tags or []})
-    )
-    return True
 
-
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def suspend_cards(cards: list[int]) -> bool:
-    """Suspend one or more cards."""
-    return get_anki_wrapper().suspend(cards)
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def suspend_cards(cards: list[int]) -> bool:
+#     """Suspend one or more cards."""
+#     return get_anki_wrapper().suspend(cards)
 
 
 @mcp.tool(annotations=IDEMPOTENT_WRITE)
@@ -262,11 +264,11 @@ def add_tags(notes: list[int], tags: str) -> bool:
     return True
 
 
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def remove_tags(notes: list[int], tags: str) -> bool:
-    """Remove tags from notes."""
-    get_anki_wrapper().remove_tags(notes, tags)
-    return True
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def remove_tags(notes: list[int], tags: str) -> bool:
+#     """Remove tags from notes."""
+#     get_anki_wrapper().remove_tags(notes, tags)
+#     return True
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -275,11 +277,11 @@ def get_media_dir_path() -> str:
     return get_anki_wrapper().get_media_dir_path()
 
 
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def change_deck(cards: list[int], deck: str) -> bool:
-    """Move cards to a different deck."""
-    get_anki_wrapper().change_deck(cards, deck)
-    return True
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def change_deck(cards: list[int], deck: str) -> bool:
+#     """Move cards to a different deck."""
+#     get_anki_wrapper().change_deck(cards, deck)
+#     return True
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -345,43 +347,43 @@ def retrieve_media_file(filename: str) -> str | None:
     return get_anki_wrapper().retrieve_media_file(filename)
 
 
-@mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
-def delete_media_file(filename: str) -> bool:
-    """Delete a media file."""
-    get_anki_wrapper().delete_media_file(filename)
-    return True
+# @mcp.tool(annotations=DESTRUCTIVE_IDEMPOTENT_WRITE)
+# def delete_media_file(filename: str) -> bool:
+#     """Delete a media file."""
+#     get_anki_wrapper().delete_media_file(filename)
+#     return True
 
 
-@mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
-def import_package(path: str) -> JsonObject:
-    """Import an .apkg file."""
-    return get_anki_wrapper().import_package(path)
+# @mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
+# def import_package(path: str) -> JsonObject:
+#     """Import an .apkg file."""
+#     return get_anki_wrapper().import_package(path)
 
 
-@mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
-def export_package(deck: str, path: str, include_sched: bool = False) -> bool:
-    """Export a deck to an .apkg file."""
-    get_anki_wrapper().export_package(deck, path, include_sched)
-    return True
+# @mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
+# def export_package(deck: str, path: str, include_sched: bool = False) -> bool:
+#     """Export a deck to an .apkg file."""
+#     get_anki_wrapper().export_package(deck, path, include_sched)
+#     return True
 
 
-@mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
-def sync() -> SyncResult:
-    """Sync collection with AnkiWeb.
+# @mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
+# def sync() -> SyncResult:
+#     """Sync collection with AnkiWeb.
+#
+#     Returns a structured SyncResult describing the collection outcome
+#     (no_changes / merged / downloaded), the download reason if any, the
+#     media sync counters, and any server message. Full uploads are never
+#     performed: if AnkiWeb is empty and requests a full upload, the call
+#     raises instead of replacing remote data.
+#     """
+#     return get_anki_wrapper().sync_to_ankiweb()
 
-    Returns a structured SyncResult describing the collection outcome
-    (no_changes / merged / downloaded), the download reason if any, the
-    media sync counters, and any server message. Full uploads are never
-    performed: if AnkiWeb is empty and requests a full upload, the call
-    raises instead of replacing remote data.
-    """
-    return get_anki_wrapper().sync_to_ankiweb()
 
-
-@mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
-def sync_media() -> MediaSyncResult:
-    """Sync only media files with AnkiWeb (not the collection)."""
-    return get_anki_wrapper().sync_media_only()
+# @mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
+# def sync_media() -> MediaSyncResult:
+#     """Sync only media files with AnkiWeb (not the collection)."""
+#     return get_anki_wrapper().sync_media_only()
 
 
 @mcp.tool(annotations=READ_ONLY)
@@ -389,6 +391,8 @@ def get_sync_status() -> JsonObject:
     """Get sync status from AnkiWeb."""
     return get_anki_wrapper().sync_status()
 
+
+register_mcp_extensions(mcp, get_anki_wrapper)
 
 mcp_app = mcp.http_app()
 

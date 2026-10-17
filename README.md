@@ -349,6 +349,8 @@ This is a **SQLite lock contention** error, not a media-sync issue — despite w
 - `suspend_cards` / `unsuspend_cards` - Manage card suspension
 - `are_suspended` / `are_due` - Check card status
 - `get_card_intervals` - Get card intervals
+- `get_review_history` - Review timestamps, ratings, intervals and response times; optional `deck`, `start_date`, `end_date`, `limit` and `offset`
+- `get_learning_summary` - Daily reviews, retention, card stages, lapses and newly studied notes; optional `deck`, `start_date` and `end_date`. Dates are inclusive UTC dates (`YYYY-MM-DD`); decks include subdecks. Retention counts passing scheduled reviews; vocabulary counts distinct notes first studied in the period. Card stages are a current snapshot.
 - `get_all_tags` - Get all tags
 - `add_tags` / `remove_tags` - Manage tags
 - `get_media_dir_path` - Get media directory
