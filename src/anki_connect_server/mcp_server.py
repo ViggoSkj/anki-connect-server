@@ -8,12 +8,11 @@ from fastmcp import FastMCP
 from anki_connect_server.anki_wrapper import AnkiWrapper
 from anki_connect_server.config import get_config
 from anki_connect_server.mcp_extentions import register_mcp_extensions
-
-# from anki_connect_server.sync import MediaSyncResult, SyncResult
+from anki_connect_server.sync import SyncResult
 from anki_connect_server.tool_metadata import (
     ADDITIVE_WRITE,
     # DESTRUCTIVE_IDEMPOTENT_WRITE,
-    # DESTRUCTIVE_OPEN_WORLD_WRITE,
+    DESTRUCTIVE_OPEN_WORLD_WRITE,
     IDEMPOTENT_WRITE,
     READ_ONLY,
     SERVER_INSTRUCTIONS,
@@ -367,17 +366,17 @@ def retrieve_media_file(filename: str) -> str | None:
 #     return True
 
 
-# @mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
-# def sync() -> SyncResult:
-#     """Sync collection with AnkiWeb.
-#
-#     Returns a structured SyncResult describing the collection outcome
-#     (no_changes / merged / downloaded), the download reason if any, the
-#     media sync counters, and any server message. Full uploads are never
-#     performed: if AnkiWeb is empty and requests a full upload, the call
-#     raises instead of replacing remote data.
-#     """
-#     return get_anki_wrapper().sync_to_ankiweb()
+@mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
+def sync() -> SyncResult:
+    """Sync collection with AnkiWeb.
+
+    Returns a structured SyncResult describing the collection outcome
+    (no_changes / merged / downloaded), the download reason if any, the
+    media sync counters, and any server message. Full uploads are never
+    performed: if AnkiWeb is empty and requests a full upload, the call
+    raises instead of replacing remote data.
+    """
+    return get_anki_wrapper().sync_to_ankiweb()
 
 
 # @mcp.tool(annotations=DESTRUCTIVE_OPEN_WORLD_WRITE)
